@@ -58,21 +58,7 @@ public class MyInterceptor implements Interceptor {
         if("POST".equals(request.method())){
             try {
                 request = rebuildReq(request);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (InvalidKeySpecException e) {
-                e.printStackTrace();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (InvalidKeyException e) {
-                e.printStackTrace();
-            } catch (BadPaddingException e) {
-                e.printStackTrace();
-            } catch (NoSuchPaddingException e) {
-                e.printStackTrace();
-            } catch (IllegalBlockSizeException e) {
-                e.printStackTrace();
-            } catch (SignatureException e) {
+            } catch (Exception e){
                 e.printStackTrace();
             }
         }
@@ -85,19 +71,7 @@ public class MyInterceptor implements Interceptor {
         Response newResponse= null;
         try {
             newResponse = rebuildRes(response);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (SignatureException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -108,12 +82,7 @@ public class MyInterceptor implements Interceptor {
 
     //加密
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public Request rebuildReq(Request request) throws IOException,
-            JSONException,
-            InvalidKeySpecException,
-            NoSuchAlgorithmException, InvalidKeyException,
-            BadPaddingException, NoSuchPaddingException,
-            IllegalBlockSizeException, SignatureException {
+    public Request rebuildReq(Request request) throws Exception {
         RequestBody body=request.body();
         JSONObject json;
 
@@ -150,7 +119,7 @@ public class MyInterceptor implements Interceptor {
 
     //解密
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public Response rebuildRes(Response response) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException, InvalidKeyException, BadPaddingException, NoSuchPaddingException, IllegalBlockSizeException, SignatureException {
+    public Response rebuildRes(Response response) throws Exception {
         String responseTxt = null;
 
         ResponseBody responseBody=response.body();
@@ -168,6 +137,7 @@ public class MyInterceptor implements Interceptor {
             String Signature=bean.getSignature();
 
             String newSign=SeqNo+EncryptKey+BizData;
+
             RSA rsa=new RSA();
             rsa.setPublicKey(RsaKey.publicKey);
             rsa.setPrivateKey(RsaKey.privateKey);
